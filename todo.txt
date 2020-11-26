@@ -1,0 +1,4 @@
+1. Animations
+2. Fixed Power Button
+3. Auto Sign-In
+4. Fix Length & Width for Mobile Render

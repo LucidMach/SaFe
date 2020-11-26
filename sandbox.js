@@ -8,7 +8,7 @@ const green = document.querySelector(".green");
 const users = [
   {
     username: "LucidMach",
-    password: "lucid.Mach@7",
+    password: "lucid.Mach7",
   },
   {
     username: "SaFe",
@@ -25,22 +25,24 @@ form.addEventListener("submit", (e) => {
       console.log("Y");
       if (user.password === form.pass.value) {
         console.log("Y");
-        red.classList.remove("johncena");
-        green.classList.add("johncena");
+        console.log(user.password);
+        console.log(form.pass.value);
+        red.classList.add("johncena");
+        green.classList.remove("johncena");
       }
-    } else {
-      red.classList.add("johncena");
-      green.classList.remove("johncena");
     }
   });
   form.classList.add("johncena");
 });
 
 power.addEventListener("click", (e) => {
-  // e.preventDefault();
   console.log("clicked");
   if (red.classList.contains("johncena")) {
-    output.val.value = 1;
-    console.log(output.val.value);
+    if (output.val.value === 0) {
+      output.val.value = 1;
+    } else {
+      output.val.value = 0;
+    }
   }
+  console.log(output.val.value);
 });
