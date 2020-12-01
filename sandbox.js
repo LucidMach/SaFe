@@ -16,20 +16,35 @@ const users = [
   },
 ];
 
-profile.addEventListener("click", (e) => form.classList.toggle("johncena"));
+if (localStorage.user) {
+  u = localStorage.getItem("user");
+  p = localStorage.getItem("pass");
+  console.log(u, p);
+  success();
+}
+
+profile.addEventListener("click", (e) => {
+  form.classList.toggle("johncena");
+});
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+  let auth = 0;
   users.forEach((user) => {
-    if (user.username === form.user.value) {
-      console.log("Y");
-      if (user.password === form.pass.value) {
-        console.log("Y");
-        console.log(user.password);
-        console.log(form.pass.value);
-        red.classList.add("johncena");
-        green.classList.remove("johncena");
+    console.log(auth);
+    if (user.username === form.user.value && auth === 0) {
+      auth = 1;
+      if (user.password === form.pass.value && auth === 1) {
+        success();
+        localStorage.setItem("user", form.user.value);
+        localStorage.setItem("pass", form.pass.value);
+        auth = 1;
+      } else {
+        auth = 0;
       }
+    } else if (auth === 0) {
+      fail();
+      auth = 0;
     }
   });
   form.classList.add("johncena");
@@ -38,11 +53,19 @@ form.addEventListener("submit", (e) => {
 power.addEventListener("click", (e) => {
   console.log("clicked");
   if (red.classList.contains("johncena")) {
-    if (output.val.value === 0) {
-      output.val.value = 1;
-    } else {
-      output.val.value = 0;
+    if (!output.uip.value) {
+      console.log("You have not assigned any value, considering 0");
     }
+    output.val.value = output.uip.value;
   }
-  console.log(output.val.value);
+  console.log(output.uip.value);
 });
+
+const success = () => {
+  red.classList.add("johncena");
+  green.classList.remove("johncena");
+};
+const fail = () => {
+  red.classList.remove("johncena");
+  green.classList.add("johncena");
+};

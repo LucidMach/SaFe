@@ -13,34 +13,34 @@ body {
   background-color: var(--primary);
   font-size: 0.7rem;
   text-align: center;
-  margin: 2.5vh;
 }
 button {
   border: none;
   border-radius: 100%;
 }
 input {
+  font-family: "Poppins", sans-serif;
   margin: 10px;
   border-radius: 10px;
   padding: 5px;
   text-align: center;
   background-color: transparent;
   border: 2px solid var(--primary);
-  color: var(--primary);
+  color: white;
 }
 ::placeholder {
-  color: var(--primary);
+  color: whitesmoke;
   opacity: 1;
   text-align: center;
 }
 .container {
   background-color: var(--theme);
-  max-width: 320px;
+  max-width: 400px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 95vh;
+  height: 91vh;
 }
 .red {
   background-color: #ff6c6c;
@@ -49,6 +49,25 @@ input {
 .green {
   background-color: rgb(101, 255, 101);
   color: rgb(0, 211, 0);
+}
+.switchbox {
+  display: flex;
+  flex-direction: column;
+  height: 25vh;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switchbox select {
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  padding: 5px;
+  color: whitesmoke;
+  background-color: var(--theme);
+}
+.switchbox input {
+  width: 50px;
+  margin: 0 0 0 25px;
 }
 .switch {
   font-size: 7rem;
@@ -86,4 +105,16 @@ input {
 }
 .johncena {
   display: none;
+}
+@media screen and (min-width: 600px) {
+  .container {
+    height: 95vh;
+    max-width: 320px;
+  }
+  body {
+    margin: 2.5vh 0;
+  }
+  .switchbox {
+    height: 30vh;
+  }
 }

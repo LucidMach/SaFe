@@ -3,14 +3,21 @@
 ESP8266WebServer server;
 
 #define led 2
+#define fan 16
 
 const char username[] = "Nukalas";
 const char password[] = "885623277";
+// const char username[] = "Lena wifi";
+// const char password[] = "Yagenrobotics";
+//const char username[] = "NukeAsus";
+//const char password[] = "244466666";
 
 void setup()
 {
   pinMode(led,OUTPUT);
+  pinMode(fan,OUTPUT);
   digitalWrite(led,1);
+  digitalWrite(fan,1);
   Serial.begin(115200);
   WiFi.begin(username,password);
   while(WiFi.status()!=WL_CONNECTED)
@@ -62,34 +69,34 @@ void SaFe()
           background-color: var(--primary);
           font-size: 0.7rem;
           text-align: center;
-          margin: 2.5vh;
         }
         button {
           border: none;
           border-radius: 100%;
         }
         input {
+          font-family: "Poppins", sans-serif;
           margin: 10px;
           border-radius: 10px;
           padding: 5px;
           text-align: center;
           background-color: transparent;
           border: 2px solid var(--primary);
-          color: var(--primary);
+          color: white;
         }
         ::placeholder {
-          color: var(--primary);
+          color: whitesmoke;
           opacity: 1;
           text-align: center;
         }
         .container {
           background-color: var(--theme);
-          max-width: 320px;
+          max-width: 400px;
           margin: 0 auto;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          height: 95vh;
+          height: 91vh;
         }
         .red {
           background-color: #ff6c6c;
@@ -98,6 +105,25 @@ void SaFe()
         .green {
           background-color: rgb(101, 255, 101);
           color: rgb(0, 211, 0);
+        }
+        .switchbox {
+          display: flex;
+          flex-direction: column;
+          height: 25vh;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .switchbox select {
+          border: 2px solid var(--primary);
+          border-radius: 10px;
+          padding: 5px;
+          color: whitesmoke;
+          background-color: var(--theme);
+        }
+        .switchbox input {
+          width: 50px;
+          margin: 0 0 0 25px;
         }
         .switch {
           font-size: 7rem;
@@ -135,6 +161,18 @@ void SaFe()
         }
         .johncena {
           display: none;
+        }
+        @media screen and (min-width: 600px) {
+          .container {
+            height: 95vh;
+            max-width: 320px;
+          }
+          body {
+            margin: 2.5vh 0;
+          }
+          .switchbox {
+            height: 30vh;
+          }
         }
       </style>
     </head>
@@ -191,20 +229,35 @@ void SaFe()
           },
         ];
 
-        profile.addEventListener("click", (e) =>
-          form.classList.toggle("johncena")
-        );
+        if (localStorage.user) {
+          u = localStorage.getItem("user");
+          p = localStorage.getItem("pass");
+          console.log(u, p);
+          success();
+        }
+
+        profile.addEventListener("click", (e) => {
+          form.classList.toggle("johncena");
+        });
 
         form.addEventListener("submit", (e) => {
           e.preventDefault();
+          let auth = 0;
           users.forEach((user) => {
-            if (user.username === form.user.value) {
-              console.log("Y");
-              if (user.password === form.pass.value) {
-                console.log("Y");
-                red.classList.add("johncena");
-                green.classList.remove("johncena");
+            console.log(auth);
+            if (user.username === form.user.value && auth === 0) {
+              auth = 1;
+              if (user.password === form.pass.value && auth === 1) {
+                success();
+                localStorage.setItem("user", form.user.value);
+                localStorage.setItem("pass", form.pass.value);
+                auth = 1;
+              } else {
+                auth = 0;
               }
+            } else if (auth === 0) {
+              fail();
+              auth = 0;
             }
           });
           form.classList.add("johncena");
@@ -213,14 +266,23 @@ void SaFe()
         power.addEventListener("click", (e) => {
           console.log("clicked");
           if (red.classList.contains("johncena")) {
-            if (output.val.value === 0) {
-              output.val.value = 1;
-            } else {
-              output.val.value = 0;
+            if (!output.uip.value) {
+              console.log("You have not assigned any value, considering 0");
             }
+            output.val.value = output.uip.value;
           }
-          console.log(output.val.value);
-          });
+          console.log(output.uip.value);
+        });
+
+        const success = () => {
+          red.classList.add("johncena");
+          green.classList.remove("johncena");
+        };
+        const fail = () => {
+          red.classList.remove("johncena");
+          green.classList.add("johncena");
+        };
+
       </script>
     </body>
   </html>
@@ -229,7 +291,13 @@ void SaFe()
   if(server.arg("val") == "0")
   {
     digitalWrite(led,0);
-    delay(500);
+    delay(5000);
     digitalWrite(led,1);
+  }
+  if(server.arg("val")=="1")
+  {
+    digitalWrite(fan,0);
+    delay(5000);
+    digitalWrite(fan,1);
   }
 }
